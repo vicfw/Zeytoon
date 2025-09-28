@@ -1,0 +1,477 @@
+# Cursor Rules for Zeytoon Next.js App
+
+## Project Overview
+
+This is a Next.js application with TypeScript, React Query, and shadcn/ui design system.
+
+## Technology Stack
+
+- **Framework**: Next.js 14+ with App Router
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS + shadcn/ui components
+- **State Management**: React Query (TanStack Query)
+- **HTTP Client**: Axios
+- **Authentication**: Cookie-based with Bearer tokens
+
+## Design System & Styling Rules
+
+### CRITICAL: Use shadcn/ui Design System
+
+- **NEVER use static colors** (e.g., `bg-blue-500`, `text-red-600`, `border-gray-900`)
+- **ALWAYS use shadcn/ui components** for UI elements
+- **Use semantic color classes** from the design system (e.g., `bg-primary`, `text-destructive`, `border-border`)
+- **Use CSS variables** for theming (already configured in globals.css)
+- **Follow shadcn/ui patterns** for component composition
+
+### Available shadcn/ui Components
+
+- Button, Card, Input, Label, Textarea
+- Dialog, Sheet, Popover, Tooltip
+- Alert, Badge, Avatar, Skeleton
+- Form, Select, Checkbox, Radio Group, Switch
+- Table, Tabs, Accordion, Collapsible
+- Progress, Slider, Calendar, Command
+- Navigation Menu, Breadcrumb, Pagination
+- And many more...
+
+### Styling Guidelines
+
+```tsx
+// ✅ CORRECT - Using shadcn components and semantic classes
+<Button variant="default" size="lg">Submit</Button>
+<Card className="p-6">
+  <Alert variant="destructive">Error message</Alert>
+</Card>
+
+// ❌ WRONG - Using static colors
+<button className="bg-blue-500 text-white">Submit</button>
+<div className="bg-gray-100 text-red-600">Error</div>
+```
+
+## Authentication & API Rules
+
+### Authentication Flow
+
+- **Token Storage**: Use cookies (not localStorage) with name "token"
+- **Auto-login**: Automatically attempt login with provided credentials if no token exists
+- **Middleware**: Redirect to `/login` if no token cookie found
+- **API Headers**: Automatically add Bearer token to all requests
+- **Cookie Management**: Use helper functions for setting/deleting cookies
+- **Token Expiration**: Set 7-day expiration for auth cookies
+
+### Login Credentials
+
+```typescript
+const loginData = {
+  phone_prefix: "+98",
+  phone: "09965291816",
+  password: "123qweASD@",
+  firebase_token: "dummy_firebase_token",
+};
+```
+
+### Cookie Helper Functions
+
+```typescript
+// Always use these helper functions for cookie management
+const setCookie = (name: string, value: string, days: number = 7) => {
+  if (typeof window !== "undefined") {
+    const expires = new Date();
+    expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+    document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+  }
+};
+
+const deleteCookie = (name: string) => {
+  if (typeof window !== "undefined") {
+    document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`;
+  }
+};
+```
+
+### API Client Configuration
+
+- Base URL: `${baseURL}/api/v3/`
+- Automatic Bearer token injection
+- Error handling for 401 (clear token), 403, 404, 500
+- Request/response logging in development
+
+## Code Standards
+
+### File Structure
+
+```
+src/
+├── app/                 # Next.js App Router pages
+├── components/          # Reusable components
+│   ├── ui/             # shadcn/ui components
+│   └── providers/      # Context providers
+├── lib/                # Utilities and configurations
+├── services/           # API services and hooks
+└── types/              # TypeScript type definitions
+```
+
+### Import Organization
+
+```typescript
+// 1. React and Next.js imports
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+// 2. Third-party libraries
+import { useMutation } from "@tanstack/react-query";
+
+// 3. Internal imports (absolute paths with @/)
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { useLogin } from "@/services/user/hooks";
+import { LoginRequest } from "@/types";
+```
+
+### Code Formatting & Style
+
+- **Use semicolons** at the end of statements
+- **Use double quotes** for strings consistently
+- **Use trailing commas** in objects and arrays
+- **Use arrow functions** for event handlers and simple functions
+- **Use template literals** for string interpolation
+- **Use const/let** instead of var
+- **Use destructuring** for props and object properties
+- **Use optional chaining** (?.) and nullish coalescing (??) operators
+- **Use async/await** instead of .then() chains
+- **Use proper TypeScript types** - avoid `any` type
+
+### Component Patterns
+
+- Use `"use client"` directive for client components
+- Prefer function components with TypeScript
+- Use React Query hooks for data fetching
+- Implement proper loading and error states
+- Use shadcn/ui components for all UI elements
+
+### Error Handling
+
+- Always handle loading, success, and error states
+- Use shadcn/ui Alert component for error messages
+- Implement retry mechanisms where appropriate
+- Log errors in development mode
+
+## Persian Localization Standards
+
+- **Encoding**: UTF-8 with `# -*- coding: utf-8 -*-` header
+- **RTL Support**: Use `python-bidi` and `arabic-reshaper` for RTL text
+- **Fonts**: Vazir font loaded from CDN for Persian text
+- **Dates**: Shamsi (Jalali) dates with `jdatetime`
+- **Locale**: `fa_IR.UTF-8`
+- **Numerals**: Persian numerals with `persiantools`
+- **Input Validation**: Persian formats (mobile: 09xx-xxx-xxxx)
+- **UI Layout**: RTL with `dir="rtl"` and `lang="fa"` in HTML
+- **Text Alignment**: Right-aligned text for Persian content
+- **Placeholders**: Right-aligned placeholder text
+- **Font Loading**: Vazir font from CDN: `https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css`
+
+## Development Guidelines
+
+### Performance
+
+- Use React Query for caching and background updates
+- Implement proper loading states
+- Optimize bundle size with dynamic imports when needed
+
+### Accessibility
+
+- Use semantic HTML elements
+- Implement proper ARIA labels
+- Ensure keyboard navigation works
+- Test with screen readers
+
+### Testing
+
+- Write unit tests for utility functions
+- Test API integration
+- Test authentication flows
+- Cross-browser testing
+
+## Common Patterns
+
+### Page Component Structure
+
+```tsx
+"use client";
+
+import { useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+export default function PageName() {
+  // Hooks and state
+  // Effects
+  // Event handlers
+
+  return (
+    <div className="container mx-auto p-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Page Title</CardTitle>
+        </CardHeader>
+        <CardContent>{/* Content using shadcn components */}</CardContent>
+      </Card>
+    </div>
+  );
+}
+```
+
+### Current Implementation Patterns
+
+#### Login Page Pattern
+
+```tsx
+// Always use this pattern for login pages
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useLogin } from "@/services/user/hooks";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Skeleton } from "@/components/ui/skeleton";
+
+export default function LoginPage() {
+  const router = useRouter();
+  const loginMutation = useLogin();
+
+  useEffect(() => {
+    // Auto-login logic
+  }, []);
+
+  useEffect(() => {
+    // Redirect logic after success
+  }, [loginMutation.isSuccess, router]);
+
+  // Loading state with Skeleton
+  if (loginMutation.isPending) {
+    return (
+      <div className="flex items-center justify-center min-h-screen p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle className="text-center">ورود به سیستم</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Skeleton className="h-12 w-12 rounded-full mx-auto" />
+            <p className="text-center text-lg">در حال ورود...</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Error state with Alert
+  if (loginMutation.isError) {
+    return (
+      <div className="flex items-center justify-center min-h-screen p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle className="text-center">خطا در ورود</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Alert variant="destructive">
+              <AlertDescription>
+                ورود ناموفق بود. لطفاً دوباره تلاش کنید.
+              </AlertDescription>
+            </Alert>
+            <Button onClick={() => window.location.reload()} className="w-full">
+              تلاش مجدد
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Success state
+  if (loginMutation.isSuccess) {
+    return (
+      <div className="flex items-center justify-center min-h-screen p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle className="text-center">ورود موفق</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Skeleton className="h-12 w-12 rounded-full mx-auto" />
+            <p className="text-center text-lg">
+              ورود موفقیت‌آمیز! در حال انتقال...
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return null;
+}
+```
+
+#### Home Page Pattern
+
+```tsx
+// Always use this pattern for protected pages
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+
+export default function Home() {
+  const router = useRouter();
+
+  useEffect(() => {
+    // Token check logic
+    const checkToken = () => {
+      const token = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("token="))
+        ?.split("=")[1];
+
+      if (!token) {
+        router.push("/login");
+      }
+    };
+
+    checkToken();
+  }, [router]);
+
+  const handleLogout = () => {
+    document.cookie = "token=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;";
+    router.push("/login");
+  };
+
+  return (
+    <div className="flex items-center justify-center min-h-screen p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="text-center">خوش آمدید</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold mb-4">به زیتون خوش آمدید</h1>
+            <p className="text-muted-foreground">شما با موفقیت وارد شدید!</p>
+          </div>
+          <Button onClick={handleLogout} variant="outline" className="w-full">
+            خروج از سیستم
+          </Button>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+```
+
+### API Service Pattern
+
+```typescript
+// services/example/index.ts
+import { apiClient } from "..";
+import { ExampleRequest, ExampleResponse } from "@/types";
+
+export const exampleService = {
+  getData: async (params: ExampleRequest): Promise<ExampleResponse> => {
+    const response = await apiClient.get<ExampleResponse>("/endpoint", {
+      params,
+    });
+    return response.data;
+  },
+};
+```
+
+### React Query Hook Pattern
+
+```typescript
+// services/example/hooks.ts
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { exampleService } from "./index";
+
+export const useExampleData = (params: ExampleRequest) => {
+  return useQuery({
+    queryKey: ["example", params],
+    queryFn: () => exampleService.getData(params),
+  });
+};
+```
+
+## File Naming Conventions
+
+- **Components**: PascalCase (e.g., `UserProfile.tsx`)
+- **Pages**: lowercase with hyphens (e.g., `user-profile/page.tsx`)
+- **Hooks**: camelCase starting with "use" (e.g., `useUserData.ts`)
+- **Services**: camelCase (e.g., `userService.ts`)
+- **Types**: PascalCase (e.g., `UserTypes.ts`)
+
+## Git & Version Control
+
+- Use conventional commits
+- Create feature branches for new functionality
+- Test thoroughly before merging
+- Keep commits atomic and focused
+
+## Environment Variables
+
+- Use `.env.local` for local development
+- Prefix with `NEXT_PUBLIC_` for client-side variables
+- Never commit sensitive data to version control
+
+## RTL & Persian Implementation Rules
+
+### HTML Structure
+
+- **Always use** `dir="rtl"` and `lang="fa"` in HTML root
+- **Load Vazir font** from CDN in the head section
+- **Set font-family** to Vazir in CSS
+
+### Component RTL Rules
+
+- **Input components**: Add `text-right` class and `dir="auto"`
+- **Label components**: Add `text-right` class
+- **Text alignment**: Use `text-right` for Persian text
+- **Flex layouts**: Use `flex-row-reverse` when needed
+- **Margins**: Use `mr-auto` instead of `ml-auto` for RTL
+
+### CSS RTL Rules
+
+```css
+/* Always include these RTL rules */
+[dir="rtl"] {
+  text-align: right;
+}
+
+[dir="rtl"] .text-left {
+  text-align: right;
+}
+
+[dir="rtl"] .text-right {
+  text-align: left;
+}
+
+[dir="rtl"] .ml-auto {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+[dir="rtl"] .mr-auto {
+  margin-right: 0;
+  margin-left: auto;
+}
+```
+
+## Remember
+
+- **ALWAYS use shadcn/ui components** - never create custom styled elements
+- **NO static colors** - use semantic classes and CSS variables
+- **Follow the established patterns** for consistency
+- **Test authentication flows** thoroughly
+- **Maintain RTL support** for Persian localization
+- **Keep components focused** and reusable
+- **Use proper code formatting** with semicolons and double quotes
+- **Always include RTL support** in new components
+- **Use Vazir font** for all Persian text
