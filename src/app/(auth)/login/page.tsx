@@ -17,7 +17,7 @@ export default function LoginPage() {
     const loginData = {
       phone_prefix: "+98",
       phone: "09361101775",
-      password: "12345678",
+      password: process.env.NEXT_PUBLIC_API_PASSWORD as string,
       firebase_token: "23141",
     };
 

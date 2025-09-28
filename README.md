@@ -1,190 +1,357 @@
-# Zeytoon App
+# Zeytoon - Currency Exchange Dashboard
 
-A modern Next.js application built with the latest technologies and best practices.
+A modern, responsive currency exchange dashboard built with Next.js 15, featuring real-time currency rates, interactive charts, and a beautiful Persian RTL interface.
 
-## 🚀 Technologies Used
+## 🌟 Features
 
-- **Next.js 15** - Latest version with App Router
-- **TypeScript** - Type-safe development
-- **Tailwind CSS** - Utility-first CSS framework
-- **shadcn/ui** - Beautiful, accessible UI components
-- **React Query (TanStack Query)** - Powerful data fetching and caching
-- **Axios** - HTTP client with interceptors
+### Core Functionality
+
+- **Real-time Currency Rates**: Live updates for FIAT and CRYPTO currencies
+- **Interactive Charts**: 30-day price history with detailed statistics
+- **Currency Details Dialog**: Comprehensive currency information with price trends
+- **Search & Filter**: Advanced search capabilities across all currencies
+- **Authentication System**: Secure login with phone number and password
+- **Responsive Design**: Optimized for desktop, tablet, and mobile devices
+
+### UI/UX Features
+
+- **Persian RTL Support**: Complete right-to-left layout with Persian fonts
+- **Modern Design**: Clean, professional interface with smooth animations
+- **Dark/Light Mode**: Theme switching capability
+- **Accessibility**: WCAG compliant with keyboard navigation
+- **Loading States**: Elegant loading indicators and error handling
+
+### Technical Features
+
+- **TypeScript**: Full type safety throughout the application
+- **React Query**: Efficient data fetching and caching
+- **Tailwind CSS**: Utility-first styling with custom design system
+- **Radix UI**: Accessible, unstyled UI components
+- **Lucide Icons**: Beautiful, consistent iconography
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js 18+
+- npm or yarn
+- Git
+
+### Installation
+
+1. **Clone the repository**
+
+   ```bash
+   git clone <repository-url>
+   cd nextjs-app
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. **Set up environment variables**
+
+   ```bash
+   cp .env.example .env.local
+   ```
+
+   Configure your environment variables:
+
+   ```env
+   NEXT_PUBLIC_API_BASE_URL=your_api_base_url
+   NEXT_PUBLIC_API_VERSION=1.0.0
+   NEXT_PUBLIC_API_PASSWORD=your_secure_password
+   ```
+
+4. **Run the development server**
+
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+5. **Open your browser**
+   Navigate to [http://localhost:3000](http://localhost:3000)
 
 ## 📁 Project Structure
 
 ```
-src/
-├── app/                    # Next.js App Router pages
-│   ├── globals.css        # Global styles
-│   ├── layout.tsx         # Root layout with providers
-│   └── page.tsx           # Home page
-├── components/            # React components
-│   ├── providers/         # Context providers
-│   │   └── query-provider.tsx
-│   └── ui/               # shadcn/ui components
-│       ├── button.tsx
-│       ├── card.tsx
-│       └── input.tsx
-├── lib/                  # Utilities and configuration
-│   ├── query-client.ts   # React Query configuration
-│   └── utils.ts          # Utility functions
-└── services/             # API services
-    ├── index.ts          # Axios configuration
-    └── api.ts            # API service functions
+nextjs-app/
+├── src/
+│   ├── app/                    # Next.js 15 App Router
+│   │   ├── (auth)/            # Authentication routes
+│   │   │   └── login/         # Login page with auto-authentication
+│   │   ├── (main)/            # Main application routes
+│   │   │   ├── _components/   # Page-specific components
+│   │   │   │   ├── currency-table.tsx
+│   │   │   │   └── currency-details-dialog.tsx
+│   │   │   ├── layout.tsx     # Main layout
+│   │   │   └── page.tsx       # Home page
+│   │   ├── globals.css        # Global styles
+│   │   └── layout.tsx         # Root layout
+│   ├── components/            # Reusable components
+│   │   ├── ui/               # UI component library
+│   │   ├── icons/            # Custom icons
+│   │   ├── sidebar.tsx       # Navigation sidebar
+│   │   └── header.tsx        # Application header
+│   ├── hooks/                # Custom React hooks
+│   ├── lib/                  # Utility functions
+│   ├── services/             # API services
+│   │   ├── currency/         # Currency-related API calls
+│   │   └── user/             # User-related API calls
+│   └── types/                # TypeScript type definitions
+├── public/                   # Static assets
+├── package.json
+├── tailwind.config.js
+├── tsconfig.json
+└── README.md
 ```
 
-## 🛠️ Setup Instructions
+## 🛠️ Technology Stack
 
-1. **Install dependencies:**
+### Frontend
 
-   ```bash
-   npm install
-   ```
+- **Next.js 15**: React framework with App Router
+- **React 19**: Latest React with concurrent features
+- **TypeScript**: Type-safe JavaScript
+- **Tailwind CSS 4**: Utility-first CSS framework
+- **Radix UI**: Accessible component primitives
+- **Lucide React**: Beautiful icon library
 
-2. **Set up environment variables:**
+### State Management & Data Fetching
 
-   ```bash
-   cp env.sample .env.local
-   ```
+- **TanStack Query**: Server state management
+- **React Hook Form**: Form handling
+- **Zod**: Schema validation
 
-   Edit `.env.local` with your API base URL:
+### Styling & UI
 
-   ```
-   NEXT_PUBLIC_API_BASE_URL=http://localhost:3000
-   ```
+- **Tailwind CSS**: Utility-first styling
+- **Class Variance Authority**: Component variants
+- **Tailwind Merge**: Class merging utility
+- **Custom Design System**: Persian RTL support
 
-3. **Start the development server:**
+### Development Tools
 
-   ```bash
-   npm run dev
-   ```
+- **ESLint**: Code linting
+- **TypeScript**: Type checking
+- **Turbopack**: Fast bundling (Next.js 15)
 
-4. **Open your browser:**
-   Navigate to [http://localhost:3000](http://localhost:3000)
+## 🎨 Design System
 
-## 🔧 Configuration
+### Color Palette
 
-### API Configuration
+- **Primary**: `#006cea` (Blue)
+- **Secondary**: `#298ffe` (Light Blue)
+- **Background**: `#f6f7fa` (Light Gray)
+- **Foreground**: `#262626` (Dark Gray)
+- **Sidebar**: `#ffffff` (White)
 
-The axios instance is configured in `src/services/index.ts` with:
+### Typography
 
-- Base URL: `${baseUrl}/api/v1/`
-- Request/response interceptors
-- Automatic token handling
-- Error handling
-- Development logging
+- **Primary Font**: Vazir (Persian)
+- **Monospace**: Geist Mono
+- **RTL Support**: Complete right-to-left layout
 
-### React Query Configuration
+### Components
 
-React Query is configured in `src/lib/query-client.ts` with:
+- **Sidebar**: Collapsible navigation with icon support
+- **Tables**: Sortable, paginated data tables
+- **Charts**: Interactive price history charts
+- **Dialogs**: Modal dialogs with loading states
+- **Forms**: Validated forms with error handling
 
-- 5-minute stale time
-- 10-minute garbage collection time
-- Automatic retry logic
-- Exponential backoff
-- Query key factories
+## 🔐 Authentication System
 
-### shadcn/ui Components
+### Login Flow
 
-Components are installed and ready to use:
+The application features an automated authentication system with the following characteristics:
 
-- Button
-- Card
-- Input
-- Add more with: `npx shadcn@latest add [component-name]`
+- **Phone-based Authentication**: Uses Iranian phone number format (+98)
+- **Automatic Login**: Pre-configured credentials for seamless access
+- **Token Management**: Secure JWT token storage in HTTP-only cookies
+- **Session Persistence**: 7-day token expiration with automatic renewal
+- **Error Handling**: Graceful fallback with retry mechanisms
 
-## 📚 Usage Examples
+### Authentication Features
 
-### Making API Calls
+- **Persian UI**: Complete RTL login interface
+- **Loading States**: Elegant loading indicators during authentication
+- **Error Recovery**: User-friendly error messages with retry options
+- **Auto-redirect**: Automatic navigation to dashboard after successful login
+- **Session Management**: Secure logout with complete data cleanup
 
-```typescript
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { userService, queryKeys } from "@/services/api";
+### Environment Configuration
 
-// Fetch data
-const { data, isLoading, error } = useQuery({
-  queryKey: queryKeys.users.lists(),
-  queryFn: userService.getUsers,
-});
-
-// Mutate data
-const mutation = useMutation({
-  mutationFn: userService.createUser,
-  onSuccess: () => {
-    // Invalidate and refetch
-    queryClient.invalidateQueries({ queryKey: queryKeys.users.lists() });
-  },
-});
+```env
+NEXT_PUBLIC_API_PASSWORD=your_secure_password
 ```
 
-### Using UI Components
+### Login Credentials (Development)
 
-```typescript
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+- **Phone Prefix**: +98 (Iran)
+- **Phone Number**: 09361101775
+- **Password**: Environment variable
+- **Firebase Token**: 23141 (development token)
 
-export function MyComponent() {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>My Card</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Button>Click me</Button>
-      </CardContent>
-    </Card>
-  );
-}
+## 📊 API Integration
+
+### Authentication Endpoints
+
+- `POST /auth/login` - User authentication
+- `POST /auth/logout` - User logout
+- `GET /auth/verify` - Token verification
+
+### Currency Endpoints
+
+- `GET /currencies` - Get all currencies
+- `GET /currencies/list` - Get filtered currencies
+- `GET /currencies/{id}` - Get specific currency
+- `GET /currencies/prices` - Get current prices
+- `GET /currencies/{code}/price-history` - Get price history
+
+### Data Flow
+
+1. **React Query** manages server state
+2. **Custom hooks** provide typed API access
+3. **Error boundaries** handle failures gracefully
+4. **Loading states** provide user feedback
+5. **Authentication** secures all API requests
+
+## 🌍 Internationalization
+
+### Persian Support
+
+- **RTL Layout**: Complete right-to-left interface
+- **Persian Fonts**: Vazir font family
+- **Persian Numbers**: Automatic number conversion
+- **Shamsi Dates**: Persian calendar support
+- **Persian Validation**: Mobile number and format validation
+
+### Localization Features
+
+- Persian placeholder text
+- RTL-optimized spacing
+- Persian error messages
+- Cultural date formatting
+
+## 🔧 Development
+
+### Available Scripts
+
+```bash
+npm run dev          # Start development server
+npm run build        # Build for production
+npm run start        # Start production server
+npm run lint         # Run ESLint
 ```
 
-## 🎨 Styling
+### Code Style
 
-The project uses Tailwind CSS with shadcn/ui components. You can:
+- **TypeScript**: Strict mode enabled
+- **ESLint**: Next.js recommended rules
+- **Prettier**: Code formatting
+- **Conventional Commits**: Commit message format
 
-- Customize the theme in `tailwind.config.js`
-- Add custom CSS in `src/app/globals.css`
-- Use Tailwind utility classes throughout your components
+### Component Guidelines
 
-## 🔍 Development Tools
-
-- **React Query Devtools** - Available in development mode
-- **TypeScript** - Full type safety
-- **ESLint** - Code linting
-- **Prettier** - Code formatting (if configured)
-
-## 📦 Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
+- Use TypeScript interfaces for props
+- Implement proper error boundaries
+- Follow accessibility guidelines
+- Use semantic HTML elements
+- Implement loading and error states
 
 ## 🚀 Deployment
 
-The app is ready for deployment on platforms like:
+### Production Build
 
-- Vercel (recommended for Next.js)
-- Netlify
-- AWS Amplify
-- Any Node.js hosting platform
+```bash
+npm run build
+npm run start
+```
 
-## 📝 Next Steps
+### Environment Variables
 
-1. Set up your API endpoints
-2. Add authentication if needed
-3. Create your application pages
-4. Add more shadcn/ui components as needed
-5. Implement your business logic
+```env
+NEXT_PUBLIC_API_BASE_URL=https://api.example.com
+NEXT_PUBLIC_API_VERSION=1.0.0
+```
+
+### Performance Optimization
+
+- **Turbopack**: Fast development builds
+- **Image Optimization**: Next.js Image component
+- **Code Splitting**: Automatic route-based splitting
+- **Caching**: React Query caching strategy
+
+## 🧪 Testing
+
+### Testing Strategy
+
+- **Unit Tests**: Component testing with Jest
+- **Integration Tests**: API integration testing
+- **E2E Tests**: End-to-end user flows
+- **Accessibility Tests**: WCAG compliance
+
+### Running Tests
+
+```bash
+npm run test         # Run unit tests
+npm run test:e2e     # Run E2E tests
+npm run test:a11y    # Run accessibility tests
+```
+
+## 📱 Browser Support
+
+- **Chrome**: 90+
+- **Firefox**: 88+
+- **Safari**: 14+
+- **Edge**: 90+
 
 ## 🤝 Contributing
+
+### Development Workflow
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Test thoroughly
+4. Add tests if applicable
 5. Submit a pull request
+
+### Code Standards
+
+- Follow TypeScript best practices
+- Write meaningful commit messages
+- Add JSDoc comments for complex functions
+- Ensure accessibility compliance
+- Test on multiple devices
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- **Next.js Team**: For the amazing framework
+- **Radix UI**: For accessible components
+- **Tailwind CSS**: For the utility-first approach
+- **Lucide**: For beautiful icons
+- **Persian Community**: For RTL support inspiration
+
+## 📞 Support
+
+For support and questions:
+
+- Create an issue in the repository
+- Contact the development team
+- Check the documentation wiki
 
 ---
 
-**Happy coding! 🎉**
+**Built with ❤️ for the Persian community**
