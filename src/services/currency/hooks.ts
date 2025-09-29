@@ -125,7 +125,7 @@ export const useUpdateCurrency = (
 // Utility hooks
 
 // Get currencies by type
-export const useCurrenciesByType = (type: "FIAT" | "CRYPTO") => {
+export const useCurrenciesByType = (type: "fiat" | "crypto") => {
   return useFilteredCurrencies({ type });
 };
 
@@ -136,10 +136,10 @@ export const useActiveCurrencies = () => {
 
 // Get fiat currencies
 export const useFiatCurrencies = () => {
-  return useCurrenciesByType("FIAT");
+  return useCurrenciesByType("fiat");
 };
 
 // Get crypto currencies
 export const useCryptoCurrencies = () => {
-  return useCurrenciesByType("CRYPTO");
+  return useCurrenciesByType("crypto");
 };

@@ -6,12 +6,12 @@ import {
   PaginationConfig,
 } from "@/components/reusable-table";
 import { ArrowLeft } from "lucide-react";
-import { format } from "date-fns";
 import { useState, useMemo } from "react";
 import { toPersianNumbers } from "@/lib/utils";
 import { CurrencyDetailsDialog } from "./currency-details-dialog";
 import { useCurrenciesByType } from "@/services/currency/hooks";
 import { Currency } from "@/types/currency";
+import { compareAsc, format, newDate } from "date-fns-jalali";
 
 // Currency data type for table display
 // نوع داده ارز برای نمایش در جدول
@@ -99,11 +99,12 @@ const NoDataIcon = () => (
 // ویژگی‌های جدول ارز
 interface CurrencyTableProps {
   currentTab: string;
+  search: string;
 }
 
 // Currency Table Component
 // کامپوننت جدول ارز
-export function CurrencyTable({ currentTab }: CurrencyTableProps) {
+export function CurrencyTable({ currentTab, search }: CurrencyTableProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCurrency, setSelectedCurrency] =
     useState<CurrencyTableData | null>(null);
@@ -111,7 +112,7 @@ export function CurrencyTable({ currentTab }: CurrencyTableProps) {
 
   // Map tab values to currency types
   // نگاشت مقادیر تب به انواع ارز
-  const currencyType = currentTab === "crypto" ? "CRYPTO" : "FIAT";
+  const currencyType = currentTab === "crypto" ? "crypto" : "fiat";
 
   // Fetch currencies from API based on current tab
   // دریافت ارزها از API بر اساس تب فعلی
@@ -125,9 +126,11 @@ export function CurrencyTable({ currentTab }: CurrencyTableProps) {
   // تبدیل داده‌های API برای نمایش در جدول با حافظه‌سازی
   const tableData = useMemo(() => {
     return currencies && Array.isArray(currencies) && currencies.length > 0
-      ? transformCurrencyData(currencies)
+      ? transformCurrencyData(
+          currencies.filter((currency) => currency.title.includes(search))
+        )
       : [];
-  }, [currencies]);
+  }, [currencies, search]);
 
   const totalPages = Math.ceil(tableData.length / 10) || 1;
 
